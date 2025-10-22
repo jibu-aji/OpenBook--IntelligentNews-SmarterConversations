@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ article.title }}</h2>
+{% if article.images.all %}
+  <h3>Images:</h3>
+  <ul>
+    {% for img in article.images.all %}
+      <li>
+        <img src="{{ img.image.url }}" alt="{{ img.caption }}" style="max-width:200px;">
+        {% if img.caption %}<p>{{ img.caption }}</p>{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+<p><strong>Author:</strong> {{ article.author.username }}</p>
+<p><strong>Category:</strong> {{ article.category.name }}</p>
+<p><strong>Type:</strong> {{ article.get_content_type_display }}</p>
+<p>{{ article.body }}</p>
+<a href="{% url 'article_list' %}">Back to Articles</a>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-lg border-bright-red bg-black rounded-3">
+        <div class="card-header bg-bright-red text-white text-center">
+          <h3 class="mb-0" style="font-family: 'Merriweather', serif;">
+            <i class="fas fa-trash-alt me-2"></i> Delete Article
+          </h3>
+        </div>
+        <div class="card-body text-white">
+          <h5 class="mb-4 text-white-50 text-center">
+            Are you sure you want to delete <span class="text-bright-red">"{{ article.title }}"</span>?
+          </h5>
+          <form method="post" class="text-center">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger fw-bold me-2">
+              <i class="fas fa-trash me-1"></i> Yes, delete
+            </button>
+            <a href="{% url 'editor_article_list' %}" class="btn btn-outline-light fw-bold">
+              <i class="fas fa-times me-1"></i> Cancel
+            </a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

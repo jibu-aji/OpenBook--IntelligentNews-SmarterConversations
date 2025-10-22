@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid mt-5">
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-lg border-bright-red bg-black rounded-3 mb-4">
+        <div class="card-header bg-bright-red text-white text-center">
+          <h2 class="mb-0" style="font-family: 'Merriweather', serif;">
+            <i class="fas fa-user me-2"></i> User Dashboard
+          </h2>
+        </div>
+        <div class="card-body">
+          <p class="text-bright-red mb-3">Articles count: {{ qa_articles|length }}</p>
+          <!-- Today's News -->
+          <div class="mb-5">
+            <h3 class="text-bright-red mb-3"><i class="fas fa-calendar-day me-2"></i> 🗞️ Today’s News</h3>
+            <div class="row g-4">
+              {% for article in today_articles %}
+                <div class="col-md-6 col-lg-4">
+                  <div class="card bg-dark border-bright-red h-100">
+                    {% if article.images.count > 0 %}
+                      {% with img=article.images.first %}
+                        <img src="{{ img.image.url }}" alt="{{ img.caption|default:article.title }}" 
+                             class="card-img-top rounded-top" style="height:180px; object-fit:cover;">
+                      {% endwith %}
+                    {% else %}
+                      <div class="bg-secondary text-white text-center py-5 rounded-top" style="height:180px;">
+                        <i class="fas fa-image fa-2x"></i><br>No image available
+                      </div>
+                    {% endif %}
+                    <div class="card-body">
+                      <h5 class="card-title text-bright-red">{{ article.title }}</h5>
+                      <p class="card-text text-white-50 mb-2">{{ article.category }}</p>
+                      <a href="{% url 'user_article_det' article.pk %}" class="btn btn-danger btn-sm fw-bold">
+                        <i class="fas fa-book-open me-1"></i> Read More
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              {% empty %}
+                <div class="col-12">
+                  <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i> No news published today.
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Trending Articles -->
+          <div class="mb-5">
+            <h3 class="text-bright-red mb-3"><i class="fas fa-fire me-2"></i> 🔥 Trending Articles</h3>
+            <div class="row g-4">
+              {% for article in trending_articles %}
+                <div class="col-md-6 col-lg-4">
+                  <div class="card bg-dark border-bright-red h-100">
+                    {% if article.images.count > 0 %}
+                      {% with img=article.images.first %}
+                        <img src="{{ img.image.url }}" alt="{{ img.caption|default:article.title }}" 
+                             class="card-img-top rounded-top" style="height:180px; object-fit:cover;">
+                      {% endwith %}
+                    {% else %}
+                      <div class="bg-secondary text-white text-center py-5 rounded-top" style="height:180px;">
+                        <i class="fas fa-image fa-2x"></i><br>No image available
+                      </div>
+                    {% endif %}
+                    <div class="card-body">
+                      <h5 class="card-title text-bright-red">{{ article.title }}</h5>
+                      <p class="card-text text-white-50 mb-2">{{ article.category }}</p>
+                      <a href="{% url 'user_article_det' article.pk %}" class="btn btn-danger btn-sm fw-bold">
+                        <i class="fas fa-book-open me-1"></i> Read
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              {% empty %}
+                <div class="col-12">
+                  <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i> No trending articles.
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          
+
+          {% comment %} <!-- chat section with ai for question and answering-->
+          <div class="card my-3 shadow-sm">
+            <div class="card-body">
+              <h5>{{ article.title }}</h5>
+              <p>Status: {{ article.get_status_display }}</p>
+
+              {% if article.qa_pairs.all %}
+                <button class="btn btn-sm btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#qa-{{ article.id }}">
+                  View Opi's Q&A 🤖
+                </button>
+                <div class="collapse mt-3" id="qa-{{ article.id }}">
+                  {% for qa in article.qa_pairs.all %}
+                    <div class="border rounded p-2 mb-2">
+                      <p><strong>Q:</strong> {{ qa.question }}</p>
+                      <p><strong>A:</strong> {{ qa.answer }}</p>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <a href="{% url 'generate_article_qa' article.id %}" class="btn btn-outline-primary btn-sm">
+                  Generate Q&A with Opi 🤖
+                </a>
+              {% endif %}
+            </div>
+          </div> {% endcomment %}
+
+          <!--###################################################################################################################################-->
+          {% for article in qa_articles %}
+            <div class="card bg-dark border-bright-red mb-3 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <div>
+                    <h5 class="mb-1 text-bright-red">{{ article.title }}</h5>
+                    <small class="text-white-50">Status: <span class="fw-semibold text-white">{{ article.get_status_display }}</span></small>
+                  </div>
+                  <div class="text-end">
+                    <a href="{% url 'update_article' article.pk %}" class="btn btn-sm btn-outline-light me-2" title="Edit article">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="{% url 'delete_article' article.pk %}" class="btn btn-sm btn-danger" title="Delete article">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </div>
+                </div>
+
+                {% if article.qa_pairs.count > 0 %}
+                  <button class="btn btn-sm btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#qa-{{ article.id }}" aria-expanded="false" aria-controls="qa-{{ article.id }}">
+                    <i class="fas fa-robot me-1"></i> View Opi's Q&A
+                  </button>
+
+                  <div class="collapse mt-3" id="qa-{{ article.id }}">
+                    <div class="bg-black p-3 rounded border border-bright-red">
+                      {% for qa in article.qa_pairs.all %}
+                        <div class="mb-3">
+                          <div class="fw-bold text-bright-red mb-1">Q: {{ qa.question }}</div>
+                          <div class="text-white-50">A: {{ qa.answer }}</div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                {% else %}
+                  <a href="{% url 'generate_article_qa' article.id %}" class="btn btn-danger btn-sm mt-2">
+                    <i class="fas fa-magic me-1"></i> Generate Q&A with Opi
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+
+    <!--###################################################################################################################################-->
+
+          <!-- All Articles -->
+          <div class="mb-5">
+            <h3 class="text-bright-red mb-3"><i class="fas fa-list me-2"></i> All Articles</h3>
+            <div class="row g-4">
+              {% for article in articles %}
+                <div class="col-md-6 col-lg-4">
+                  <div class="card bg-dark border-bright-red h-100">
+                    {% if article.images.count > 0 %}
+                      {% with img=article.images.first %}
+                        <img src="{{ img.image.url }}" alt="{{ img.caption|default:article.title }}" 
+                             class="card-img-top rounded-top" style="height:180px; object-fit:cover;">
+                      {% endwith %}
+                    {% else %}
+                      <div class="bg-secondary text-white text-center py-5 rounded-top" style="height:180px;">
+                        <i class="fas fa-image fa-2x"></i><br>No image available
+                      </div>
+                    {% endif %}
+                    <div class="card-body">
+                      <h5 class="card-title text-bright-red">{{ article.title }}</h5>
+                      <p class="card-text text-white-50 mb-2">{{ article.category }}</p>
+                      <a href="{% url 'user_article_det' article.pk %}" class="btn btn-danger btn-sm fw-bold">
+                        <i class="fas fa-book-open me-1"></i> Read More
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          {% comment %} <!-- Saved Articles -->
+          <div class="mb-4">
+            <h3 class="text-bright-red mb-3"><i class="fas fa-bookmark me-2"></i> Your Saved Articles</h3>
+            <ul class="list-group list-group-flush">
+              {% for saved in saved_articles %}
+                <li class="list-group-item bg-black text-white border-bottom border-bright-red">
+                  <a href="{% url 'user_article_det' saved.article.pk %}" class="text-bright-red fw-bold text-decoration-none">
+                    <i class="fas fa-bookmark me-2"></i>{{ saved.article.title }}
+                  </a>
+                </li>
+              {% empty %}
+                <li class="list-group-item bg-black text-white border-bottom border-bright-red text-center">
+                  <span class="text-white-50">No saved articles yet.</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div> {% endcomment %}
+
+          <div class="text-center mt-4">
+            <a href="{% url 'article_list' %}" class="btn btn-outline-light fw-bold">
+              <i class="fas fa-arrow-left me-1"></i> Back to Articles
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

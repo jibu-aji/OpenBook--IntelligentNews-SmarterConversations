@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-bright-red mb-4"><i class="fas fa-folder-open me-2"></i> {{ category.name }}</h1>
+
+    {% if articles %}
+        <div class="row">
+            {% for article in articles %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card bg-dark border-bright-red text-white h-100 shadow-sm">
+                        {% if article.images %}
+                            <img src="{{ article.images.url }}" class="card-img-top rounded-top border-bottom border-bright-red" style="height:200px; object-fit:cover;">
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">
+                                <a href="{% url 'user_article_det' article.pk %}" class="text-bright-red fw-bold text-decoration-none">
+                                    {{ article.title }}
+                                </a>
+                            </h5>
+                            <p class="card-text text-white-50">{{ article.excerpt }}</p>
+                            <small class="text-white-50 mt-auto">
+                                <i class="fas fa-calendar-day me-1"></i> {{ article.created_at|date:"F j, Y" }} |
+                                <i class="fas fa-user-edit me-1"></i> {{ article.author.username }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle me-2"></i> No articles found in this category yet.
+        </div>
+    {% endif %}
+
+    <a href="{% url 'article_list' %}" class="btn btn-outline-light mt-3 fw-bold">
+        <i class="fas fa-arrow-left me-1"></i> Back to Articles
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>🌍 API Latest News</h2>
+
+{% if articles %}
+  <div class="row">
+    {% for item in articles %}
+      <div class="col-md-4 mb-3">
+        <div class="card h-100">
+          {% if item.image_url %}
+            <img src="{{ item.image_url }}" class="card-img-top" alt="News Image">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ item.title }}</h5>
+            <p class="card-text">{{ item.description|default:"No description available." }}</p>
+            {% if item.link %}
+              <a href="{{ item.link }}" target="_blank" class="btn btn-sm btn-primary">Read more</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No news available at the moment.</p>
+{% endif %}
+{% endblock %}

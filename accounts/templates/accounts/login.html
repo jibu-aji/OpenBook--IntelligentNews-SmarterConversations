@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+
+      <div class="card shadow-lg border-bright-red bg-black rounded-3">
+        <div class="card-header text-center bg-bright-red text-white">
+          <h3 class="mb-0" style="font-family: 'Merriweather', serif;">
+            <i class="fas fa-sign-in-alt me-2"></i> Login
+          </h3>
+        </div>
+
+        <div class="card-body">
+          <form method="POST" action="{% url 'login' %}" class="text-white">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            <div class="d-grid mt-3">
+              <button type="submit" class="btn btn-danger btn-lg fw-bold">
+                <i class="fas fa-arrow-right-to-bracket me-2"></i> Login
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card-footer text-center bg-black border-top border-bright-red">
+          <a href="#" class="text-bright-red fw-semibold">Forgot Password?</a> <br>
+          <small class="text-white-50">Don't have an account? 
+            <a href="{% url 'register' %}" class="text-bright-red fw-bold">Register</a>
+          </small>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

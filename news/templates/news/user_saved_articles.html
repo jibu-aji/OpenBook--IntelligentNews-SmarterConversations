@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    <h1 class="text-bright-red mb-4"><i class="fas fa-bookmark me-2"></i> Your Saved Articles</h1>
+
+    {% if saved_articles %}
+        <div class="list-group">
+            {% for saved in saved_articles %}
+                <div class="list-group-item list-group-item-action bg-black text-white border-bright-red mb-3 rounded shadow-sm">
+                    <!-- Article Title -->
+                    <h5>
+                        <a href="{% url 'user_article_det' saved.article.pk %}" class="text-bright-red fw-bold text-decoration-none">
+                            {{ saved.article.title }}
+                        </a>
+                    </h5>
+
+                    <!-- Article Meta -->
+                    <small class="text-white-50">
+                        <i class="fas fa-calendar-day me-1"></i> {{ saved.article.created_at|date:"F j, Y" }} |
+                        <i class="fas fa-user-edit me-1"></i> {{ saved.article.author.username }} |
+                        <i class="fas fa-tag me-1"></i> {{ saved.article.category.name }}
+                    </small>
+
+                    <!-- Article Excerpt -->
+                    {% if saved.article.excerpt %}
+                        <p class="mt-2 text-white-50">{{ saved.article.excerpt }}</p>
+                    {% endif %}
+
+                    <!-- Actions -->
+                    <div class="mt-2">
+                        <a href="{% url 'user_article_det' saved.article.pk %}" class="btn btn-sm btn-outline-light me-2 fw-bold">
+                            <i class="fas fa-book-open me-1"></i> Read More
+                        </a>
+                        <a href="{% url 'user_article_save' saved.article.pk %}" class="btn btn-sm btn-danger fw-bold">
+                            <i class="fas fa-bookmark me-1"></i> Unsave
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle me-2"></i> You haven’t saved any articles yet. Browse articles and save your favorites!
+        </div>
+    {% endif %}
+
+    <a href="{% url 'article_list' %}" class="btn btn-outline-light mt-3 fw-bold">
+        <i class="fas fa-arrow-left me-1"></i> Back to Articles
+    </a>
+</div>
+
+{% endblock %}

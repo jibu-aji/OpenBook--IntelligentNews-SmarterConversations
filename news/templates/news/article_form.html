@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container fluid mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-bright-red bg-black rounded-3">
+        <div class="card-header bg-bright-red text-white text-center">
+          <h3 class="mb-0" style="font-family: 'Merriweather', serif;">
+            {% if form.instance.pk %}
+              <i class="fas fa-edit me-2"></i> Edit Article
+            {% else %}
+              <i class="fas fa-plus me-2"></i> Create Article
+            {% endif %}
+          </h3>
+        </div>
+        <div class="card-body text-white">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-4">
+              {{ form.as_p }}
+            </div>
+            <h5 class="mb-3 text-bright-red"><i class="fas fa-image me-2"></i> Upload Images</h5>
+            {{ formset.management_form }}
+            <div class="mb-4">
+              {% for f in formset %}
+                {{ f.as_p }}
+              {% endfor %}
+            </div>
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-danger fw-bold">
+                <i class="fas fa-save me-2"></i> Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

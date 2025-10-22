@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="card bg-black border-bright-red shadow-lg">
+        <div class="card-header bg-bright-red text-white">
+          <h2 class="mb-0" style="font-family: 'Merriweather', serif;">
+            <i class="fas fa-user-shield me-2"></i> Moderator Dashboard
+          </h2>
+        </div>
+        <div class="card-body">
+          <p class="mb-4 text-white-50">
+            Welcome, <span class="fw-bold text-bright-red">{{ request.user.username }}</span> (Moderator)
+          </p>
+          <div class="list-group">
+            <a href="{% url 'moderator_article_list' %}" class="list-group-item list-group-item-action bg-black text-white border-bright-red mb-2 rounded">
+              <i class="fas fa-check-circle me-2 text-bright-red"></i> Articles Pending Approval
+            </a>
+            <a href="{% url 'article_list' %}" class="list-group-item list-group-item-action bg-black text-white border-bright-red mb-2 rounded">
+              <i class="fas fa-eye me-2 text-bright-red"></i> View Published Articles
+            </a>
+            <a href="{% url 'moderator_comment_view_list' %}" class="list-group-item list-group-item-action bg-black text-white border-bright-red mb-2 rounded">
+              <i class="fas fa-comments me-2 text-bright-red"></i> Manage Comments
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

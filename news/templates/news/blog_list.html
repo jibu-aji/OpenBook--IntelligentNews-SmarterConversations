@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-bright-red mb-3"><i class="fas fa-blog me-2"></i> Blogs</h2>
+    <div class="row">
+        {% for blog in blogs %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 bg-dark border-bright-red text-white shadow-sm">
+                    {% if blog.images %}
+                        <img src="{{ blog.images.url }}" class="card-img-top rounded-top border-bottom border-bright-red" alt="{{ blog.title }}" style="height:180px;object-fit:cover;">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-bright-red">{{ blog.title }}</h5>
+                        <p class="card-text text-white-50">{{ blog.excerpt|truncatewords:25 }}</p>
+                        <a href="{% url 'user_article_det' blog.pk %}" class="btn btn-danger btn-sm fw-bold mt-auto">
+                            <i class="fas fa-book-open me-1"></i> Read More
+                        </a>
+                    </div>
+                    <div class="card-footer text-white-50 bg-black border-top border-bright-red">
+                        <i class="fas fa-calendar-day me-1"></i> Published: {{ blog.created_at|date:"M d, Y" }}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i> No blogs found.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

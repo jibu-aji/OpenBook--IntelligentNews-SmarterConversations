@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+  <h2>Register Staff (Admin Only)</h2>
+  
+  <form method="POST">
+    {% csrf_token %}
+    <div>
+      <label>Username:</label>
+      <input type="text" name="username" required>
+    </div>
+    <div>
+      <label>Email:</label>
+      <input type="email" name="email" required>
+    </div>
+    <div>
+      <label>Password:</label>
+      <input type="password" name="password" required>
+    </div>
+    <div>
+      <label>Role:</label>
+      <select name="role" required>
+        <option value="editor">Editor</option>
+        <option value="moderator">Moderator</option>
+      </select>
+    </div>
+    <button type="submit">Create Staff</button>
+  </form>
+
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container-fluid mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-bright-red bg-black rounded-3">
+        <!-- Article Header -->
+        <div class="card-header bg-bright-red text-white text-center">
+          <h1 class="mb-1" style="font-family: 'Merriweather', serif;">
+            <i class="fas fa-newspaper me-2"></i> {{ article.title }}
+          </h1>
+          <div class="small text-white-50">
+            <span><i class="fas fa-calendar-day me-1"></i> {{ article.created_at|date:"F j, Y" }}</span> |
+            <span><i class="fas fa-user-edit me-1"></i> {{ article.author.username }}</span> |
+            <span><i class="fas fa-tag me-1"></i> {{ article.category.name }}</span>
+          </div>
+        </div>
+        <div class="card-body text-white">
+         <!-- Article Images -->
+        {% if article.images.all %}
+        <div id="articleImagesCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            {% for img in article.images.all %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <img src="{{ img.image.url }}" class="d-block w-100 rounded border border-bright-red" 
+                  style="max-height:350px; object-fit:cover;" alt="{{ img.caption|default:article.title }}">
+              {% if img.caption %}
+                <div class="carousel-caption d-none d-md-block">
+                  <p class="text-white-50">{{ img.caption }}</p>
+                </div>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+
+          <!-- Controls -->
+          {% if article.images.count > 1 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#articleImagesCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#articleImagesCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          {% endif %}
+        </div>
+        {% endif %}
+
+
+
+          <!-- Article Content -->
+           
+          <div class="mb-4">
+            {% if article.excerpt %}
+              <p class="fst-italic text-white-50">{{ article.excerpt }}</p>
+            {% endif %}
+            <p>{{ article.body|linebreaks }}</p>
+
+            <!--###################################################################################################################################-->
+    {% comment %} <!-- AI Generated Q&A Section -->
+      {% if qa_pairs %}
+        <div class="mt-5 p-4 rounded shadow-sm border border-secondary-subtle bg-light">
+          <h4 class="mb-3 text-primary">AI Generated Questions & Answers</h4>
+          
+          {% for qa in qa_pairs %}
+            <div class="mb-3 p-3 rounded bg-white border-start border-4 border-info">
+              <p class="mb-1 fw-semibold text-dark">
+                Q{{ forloop.counter }}: {{ qa.question }}
+              </p>
+              <p class="text-secondary mb-0">
+                A: {{ qa.answer }}
+              </p>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="mt-4 text-muted text-center">
+          <em>AI is generating the questions and answers for this article...</em>
+        </div>
+      {% endif %} {% endcomment %}
+
+      <!--###################################################################################################################################-->
+         <!-- Opi Q&A Section -->
+          <br>
+    {% if article.qa_pairs.all %}
+      <button class="btn btn-sm btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#qa-{{ article.id }}" aria-expanded="false" aria-controls="qa-{{ article.id }}">
+        <i class="fas fa-robot me-1"></i> View Opi's Q&A
+      </button>
+
+      <div class="collapse mt-3" id="qa-{{ article.id }}">
+        <div class="bg-black p-3 rounded border border-bright-red">
+          {% for qa in article.qa_pairs.all %}
+            <div class="mb-3">
+              <div class="fw-bold text-bright-red mb-1">Q: {{ qa.question }}</div>
+              <div class="text-white-50">A: {{ qa.answer }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% else %}
+      <a href="{% url 'generate_article_qa' article.id %}" class="btn btn-danger btn-sm mt-2">
+        <i class="fas fa-magic me-1"></i> Generate Q&A with Opi
+      </a>
+    {% endif %}
+<br>
+<br>
+    <!--###################################################################################################################################-->
+
+            <!--###################################################################################################################################-->
+
+       
+          <!-- Reactions Section -->
+          <div class="mb-4 d-flex align-items-center gap-3">
+            <span class="fw-bold text-bright-red"><i class="fas fa-thumbs-up"></i> {{ like_count }}</span>
+            <span class="fw-bold text-bright-red"><i class="fas fa-thumbs-down"></i> {{ dislike_count }}</span>
+            {% if user.is_authenticated %}
+              <a href="{% url 'user_article_react' article.pk 'like' %}" class="btn btn-outline-light btn-sm fw-bold">
+                <i class="fas fa-thumbs-up"></i> Like
+              </a>
+              <a href="{% url 'user_article_react' article.pk 'dislike' %}" class="btn btn-outline-light btn-sm fw-bold">
+                <i class="fas fa-thumbs-down"></i> Dislike
+              </a>
+            {% else %}
+              <span class="text-white-50 ms-2"><a href="{% url 'login' %}" class="text-bright-red fw-bold">Login</a> to react.</span>
+            {% endif %}
+          </div>
+
+          <!-- Save / Unsave -->
+          <div class="mb-4">
+            {% if user.is_authenticated %}
+              {% if is_saved %}
+                <a href="{% url 'user_article_save' article.pk %}" class="btn btn-outline-light fw-bold">
+                  <i class="fas fa-bookmark"></i> Unsave
+                </a>
+              {% else %}
+                <a href="{% url 'user_article_save' article.pk %}" class="btn btn-danger fw-bold">
+                  <i class="fas fa-bookmark"></i> Save
+                </a>
+              {% endif %}
+            {% else %}
+              <span class="text-white-50"><a href="{% url 'login' %}" class="text-bright-red fw-bold">Login</a> to save articles.</span>
+            {% endif %}
+          </div>
+
+          <hr class="border-bright-red">
+
+          <!-- Comments Section -->
+          <div class="mb-4">
+            <h3 class="text-bright-red mb-3"><i class="fas fa-comments me-2"></i> Comments</h3>
+            {% for comment in comments %}
+              <div class="mb-3 p-3 rounded bg-dark border border-bright-red">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="fw-bold text-bright-red"><i class="fas fa-user me-1"></i> {{ comment.user.username }}</span>
+                  <span class="text-white-50 small"><i class="fas fa-clock me-1"></i> {{ comment.created_at|date:"M d, Y H:i" }}</span>
+                </div>
+                <p class="mb-2">{{ comment.text }}</p>
+                {% if user.role == "moderator" %}
+                  <form method="post" action="{% url 'moderator_delete_comment' comment.pk %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm fw-bold">
+                      <i class="fas fa-trash"></i> Delete
+                    </button>
+                  </form>
+                {% endif %}
+              </div>
+            {% empty %}
+              <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle me-2"></i> No comments yet.
+              </div>
+            {% endfor %}
+
+            {% if user.is_authenticated %}
+              <form method="post" class="mt-4">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <textarea name="content" rows="3" class="form-control bg-dark text-white border-bright-red" placeholder="Add a comment..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-danger fw-bold">
+                  <i class="fas fa-comment-dots me-1"></i> Post Comment
+                </button>
+              </form>
+            {% else %}
+              <div class="text-white-50 mt-2">
+                <a href="{% url 'login' %}" class="text-bright-red fw-bold">Login</a> to comment.
+              </div>
+            {% endif %}
+          </div>
+
+          <hr class="border-bright-red">
+
+          <div class="text-center">
+            <a href="{% url 'article_list' %}" class="btn btn-outline-light fw-bold">
+              <i class="fas fa-arrow-left me-1"></i> Back to Articles
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% comment %} {% if qa_pairs %}
+<div class="modal fade" id="qaModal" tabindex="-1" aria-labelledby="qaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content bg-dark text-white border-bright-red">
+      <div class="modal-header">
+        <h5 class="modal-title" id="qaModalLabel">AI Generated Questions & Answers</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% for qa in qa_pairs %}
+          <div class="mb-3">
+            <p class="fw-bold">Q{{ forloop.counter }}: {{ qa.question }}</p>
+            <p>A: {{ qa.answer }}</p>
+            <hr class="border-light">
+          </div>
+        {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %} {% endcomment %}
+
+
+{% endblock %}

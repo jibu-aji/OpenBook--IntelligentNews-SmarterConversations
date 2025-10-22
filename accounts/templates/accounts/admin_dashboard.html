@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card bg-black border-bright-red shadow-lg">
+        <div class="card-header bg-bright-red text-white">
+          <h2 class="mb-0" style="font-family: 'Merriweather', serif;">
+            <i class="fas fa-user-shield me-2"></i> Admin Dashboard
+          </h2>
+        </div>
+        <div class="card-body">
+          <p class="mb-4 text-white-50">
+            Welcome, <span class="fw-bold text-bright-red">{{ request.user.username }}</span> (Admin)
+          </p>
+          <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action bg-black text-white border-bright-red mb-2 rounded">
+              <i class="fas fa-users-cog me-2 text-bright-red"></i> Manage Users & Roles
+            </a>
+            <a href="#" class="list-group-item list-group-item-action bg-black text-white border-bright-red mb-2 rounded">
+              <i class="fas fa-newspaper me-2 text-bright-red"></i> Manage All Articles
+            </a>
+            <a href="{% url 'admin_analytics' %}" class="list-group-item list-group-item-action bg-black text-white border-bright-red mb-2 rounded">
+              <i class="fas fa-chart-line me-2 text-bright-red"></i> View Analytics Dashboard
+            </a>
+            <a href="#" class="list-group-item list-group-item-action bg-black text-white border-bright-red mb-2 rounded">
+              <i class="fas fa-cogs me-2 text-bright-red"></i> Site Settings
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
