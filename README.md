@@ -2,12 +2,12 @@
 Django Based Web Platform
 
 
-<! -- # PNG Gallery -->
+# Gallery 
 
-<!-- <p align="center">
-  <img src="https://github.com/OWNER/REPO/blob/BRANCH/PATH/image1.png?raw=true" style="max-width:100%;height:auto;" alt="Image 1"/>
+ <p align="center">
+  <img src="images/home.png?raw=true" style="max-width:100%;height:auto;" alt="Image 1"/>
   <img src="https://github.com/OWNER/REPO/blob/BRANCH/PATH/image2.png?raw=true" style="max-width:100%;height:auto;" alt="Image 2"/>
-</p> -->
+</p> 
 
 
 OpenBook is an AI-integrated news and content platform built with **Django**, designed to deliver, analyze, and interact with news intelligently.  
