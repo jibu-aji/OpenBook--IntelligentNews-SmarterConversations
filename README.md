@@ -1,14 +1,13 @@
 # OpenBook--IntelligentNews-SmarterConversations
 Django Based Web Platform
 
-
-# Gallery 
+---
 
  <p align="center">
   <img src="images/home.png?raw=true" style="max-width:100%;height:auto;" alt="Image 1"/>
-  <img src="https://github.com/OWNER/REPO/blob/BRANCH/PATH/image2.png?raw=true" style="max-width:100%;height:auto;" alt="Image 2"/>
 </p> 
 
+---
 
 OpenBook is an AI-integrated news and content platform built with **Django**, designed to deliver, analyze, and interact with news intelligently.  
 It combines traditional article publishing with modern AI capabilities — including **automated Q&A generation**, **contextual chatbot interactions**, and **smart content management**.
@@ -23,6 +22,25 @@ It combines traditional article publishing with modern AI capabilities — inclu
 - **Comments & Reactions** — Like, dislike, comment, and save articles for later.
 - **Role-Based Access Control (RBAC)** — Workflow for reviewing, approving, or rejecting articles.
 - **Community Mode** — User-submitted posts displayed as public content.
+
+---
+
+# Gallery
+
+<div style="display: flex; gap: 10px;">
+  <img src="images/api_news_page.png" alt="Image 1" style="width: 30%; max-width: 150px; height: auto;">
+  <img src="images/article_det.png" alt="Image 2" style="width: 30%; max-width: 150px; height: auto;">
+  <img src="images/opi_qa_generator.png" alt="Image 3" style="width: 30%; max-width: 150px; height: auto;">
+</div>
+
+<details>
+  <summary>Show more images</summary>
+  <div style="display: flex; gap: 10px; margin-top:10px;">
+    <img src="images/editor_dash.png" alt="Image 4" style="width: 30%; max-width: 150px; height: auto;">
+    <img src="images/moderator_dash.png" alt="Image 5" style="width: 30%; max-width: 150px; height: auto;">
+    <img src="images/opi-chat-underdevelopment.png" alt="Image 6" style="width: 30%; max-width: 150px; height: auto;">
+  </div>
+</details>
 
 ---
 
@@ -58,6 +76,8 @@ It combines traditional article publishing with modern AI capabilities — inclu
 | **Version Control** | Git, GitHub |
 
 ---
+
+
 
 ## ⚙️ Setup Instructions
 
